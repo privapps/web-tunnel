@@ -30,16 +30,14 @@ jobs:
           && sed -i 's/"\[::1\]:6667":/#"\[::1\]:6667":/g' ircd.yaml \
           && chmod u+x ergo \
           && cd .. \
-          && wget https://github.com/privapps/gotunnelme/releases/download/v0.0.1/gotunnelme-linux-amd64.gz \
-          && gzip -d gotunnelme-linux-amd64.gz \
-          && chmod u+x gotunnelme-linux-amd64 
           cd ergo
           ./ergo mkcerts || echo
           ./ergo run & 
           cd ../kiwiirc
           ./kiwiirc &
-          cd ..
-          ./gotunnelme-linux-amd64 8080 2>&1 | tee info.txt &
+          mkdir ../tunnelme
+          cd ../tunnelme
+          npx localtunnel --port 8000 2>&1 | tee info.txt &
           sleep 10
       - name: info
         shell: bash 
