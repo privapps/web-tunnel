@@ -36,7 +36,7 @@ jobs:
           mkdir ../tunnelme
           cd ../tunnelme
           which npx npm
-          npx localtunnel --port 8000 2>&1 | tee info.txt &
+          npx localtunnel --port 8080 2>&1 | tee info.txt &
       - name: info
         shell: bash 
         run: |
