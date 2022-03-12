@@ -41,12 +41,12 @@ jobs:
         run: |
           cd tunnelme
           ls -l
-          cat *.txt
+          cat *.txt || echo not found?
       - name: info2
         shell: bash 
         run: |
           cd tunnelme
           sleep 5
           ls -l
-          cat *.txt
-          tail -f info.txt
+          cat *.txt || echo not found?
+          tail -f info.txt || sleep 20 && tail -f info.txt
