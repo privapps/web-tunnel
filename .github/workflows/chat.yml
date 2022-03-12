@@ -35,7 +35,7 @@ jobs:
           ./kiwiirc &
           mkdir ../tunnelme
           cd ../tunnelme
-	  which npx npm
+          which npx npm
           npx localtunnel --port 8000 2>&1 | tee info.txt &
       - name: info
         shell: bash 
