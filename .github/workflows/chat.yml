@@ -34,9 +34,8 @@ jobs:
           cd ../kiwiirc
           ./kiwiirc &
           mkdir ../tunnelme
-          cd ../tunnelme
-          which npx npm
           npx localtunnel --port 8080 2>&1 | tee info.txt &
+          sleep 5
       - name: info
         shell: bash 
         run: |
@@ -47,6 +46,7 @@ jobs:
         shell: bash 
         run: |
           cd tunnelme
+          sleep 5
           ls -l
           cat *.txt
           tail -f info.txt
