@@ -1,0 +1,56 @@
+name: chat
+on:
+  push:
+    branches: [ chat ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: chat
+        shell: bash 
+        run: |
+          TGT='amd64';  _KIWI_FILE_=kiwiirc_20.05.24.1_linux_$TGT  \
+          && wget https://kiwiirc.com/downloads/$_KIWI_FILE_.zip \
+          && unzip $_KIWI_FILE_.zip \
+          && rm $_KIWI_FILE_.zip \
+          && mv kiwiirc_linux_$TGT kiwiirc \
+          && cd kiwiirc \
+          && mv config.conf.example config.conf \
+          && sed -i 's/port = 80/port = 8080/g' config.conf \
+          && sed -i 's/hostname = "irc.kiwiirc.com"/hostname = "127.0.0.1"/g' config.conf \
+          && cd .. \
+          && TGT='x86_64'; _ERGO_FILE_=ergo-2.9.1-linux-$TGT \
+          && wget https://github.com/ergochat/ergo/releases/download/v2.9.1/$_ERGO_FILE_.tar.gz \
+          && tar xf $_ERGO_FILE_.tar.gz \
+          && rm $_ERGO_FILE_.tar.gz \
+          && mv $_ERGO_FILE_ ergo \
+          && cd ergo \
+          && mv default.yaml ircd.yaml \
+          && sed -i 's/"\[::1\]:6667":/#"\[::1\]:6667":/g' ircd.yaml \
+          && chmod u+x ergo \
+          && cd .. \
+          && wget https://github.com/privapps/gotunnelme/releases/download/v0.0.1/gotunnelme-linux-amd64.gz \
+          && gzip -d gotunnelme-linux-amd64.gz \
+          && chmod u+x gotunnelme-linux-amd64 
+          cd ergo
+          ./ergo mkcerts || echo
+          ./ergo run & 
+          cd ../kiwiirc
+          ./kiwiirc &
+          cd ..
+          ./gotunnelme-linux-amd64 8080 2>&1 | tee info.txt &
+          sleep 10
+      - name: info
+        shell: bash 
+        run: |
+          sleep 10
+          ls -l
+          cat *.txt
+      - name: info2
+        shell: bash 
+        run: |
+          sleep 10
+          ls -l
+          cat *.txt
+          tail -f info.txt
