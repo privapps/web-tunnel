@@ -40,13 +40,13 @@ jobs:
       - name: info
         shell: bash 
         run: |
-          cd ../tunnelme
+          cd tunnelme
           ls -l
           cat *.txt
       - name: info2
         shell: bash 
         run: |
-          cd ../tunnelme
+          cd tunnelme
           ls -l
           cat *.txt
           tail -f info.txt
